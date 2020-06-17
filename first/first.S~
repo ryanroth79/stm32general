@@ -1,0 +1,16 @@
+	// First example from vivonomicon's blog
+	.syntax unified
+	.cpu cortex-m
+	.fpu softvfp
+	.thumb
+
+	// Global memory locations
+	.global vtable
+	.global reset_handler
+
+	/* The actual vector table */
+	.type vtable, %xobject
+	vtable :
+	.word _estack
+	.word reset_handler
+	.size vtable, .-vtable

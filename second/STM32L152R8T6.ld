@@ -1,0 +1,78 @@
+ENTRY(reset_handler)
+	
+	/* memory setup and definitions */
+/* Following the example in "bare-metal" stm32 vivonomicon's blog */
+	_estack = 0x20001000;
+
+	_Min_Leftover_RAM = 0x400 ;
+
+MEMORY
+{
+  FLASH ( rx )	: ORIGIN = 0x08000000, LENGTH = 64K
+  RAM ( rwx ) 	: ORIGIN = 0x20000000, LENGTH = 4K
+}
+
+SECTIONS
+{
+/* Vector table def to be put at the start of the flash memory */
+
+	.vector_table :
+	{
+	. = ALIGN(4);
+	KEEP (*(.vector_table))
+	. = ALIGN(4);
+	} >FLASH	
+
+/* Put the program text in... */
+	.text :
+	{
+	. = ALIGN(4);
+	*(.text)
+	*(.text*)
+	. = ALIGN(4);
+	} >FLASH
+
+/* 'rodata' - read-only data section */
+	.rodata :
+	{
+	. = ALIGN(4);
+	*(.rodata)
+	*(.rodata*)
+	. = ALIGN(4);
+	} >FLASH
+
+/* The DATA section - variables and such... */
+	_sidata = .; /* What's this?? */
+	.data : AT(_sidata)
+	{
+	. = ALIGN(4);
+	_sdata = .; /* mark the start of the data section */
+	*(.data)
+	*(.data*)
+	_edata = .; /* mark the end */
+	. = ALIGN(4);
+	} >RAM
+
+/* The BSS section (B something symbol ...) The bit that's initialized to 0 */
+	.bss :
+	{
+	. = ALIGN(4);
+	_sbss = .; /* mark the start of the bss section */
+	*(.bss)
+	*(.bss*)
+	*(COMMON)
+	. = ALIGN(4);
+	_ebss = .; /* mark the end... */
+	} >RAM /* put this in RAM */
+
+/* Allocation for the stack and heap */
+	.dynamic_allocations :
+	{
+	. = ALIGN(4);
+	_ssystem_ram = .;
+	. = . + _Min_Leftover_RAM;
+	. = ALIGN(4);
+	_esystem_ram = .;
+	} >RAM
+
+}
