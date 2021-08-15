@@ -1,0 +1,23 @@
+V "GNAT Lib v8"
+A -g
+A -mcpu=cortex-m3
+A -mthumb
+A -mfloat-abi=hard
+A -mfpu=vfp
+A -mtls-dialect=gnu
+A -march=armv7-m
+P ZX
+
+RN
+
+U program%b		program.adb		4de9278b NE OO PK
+
+U program%s		program.ads		aea7b72e EE NE OO PK
+
+D program.ads		20210815002350 aea7b72e program%s
+D program.adb		20210815002141 e34e90a5 program%b
+D system.ads		20210815011717 ce0b6163 system%s
+X 1 program.ads
+1K9*Program 4l5 4e12 2|1b14 8l5 8t12
+2U14*Run 3i<c,run>22 2|2b14 7l8 7t11
+
